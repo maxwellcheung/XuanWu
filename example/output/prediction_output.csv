@@ -1,0 +1,2 @@
+pdbid,substitution,model_locator,ddg_pred_kcal_mol,execution_device
+5XH3_A_S185H,S185H,A185H,-0.28845787048339844,cuda:0
