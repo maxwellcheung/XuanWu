@@ -1,46 +1,32 @@
-# IsPETase S185H 单突变预测示例
+IsPETase S185H Single-Mutation Prediction Example
 
+## Input Description
 
-```
-
-## 输入说明
-
-`input/data.csv` 仅包含一条记录：
+`input/data.csv` contains only one record:
 
 ```csv
 pdbid,wt,mut,substitution,mutation,ddg
 5XH3_A_S185H,wt_5XH3_A_S185H,mut_5XH3_A_S185H,S185H,A185H,0.0
-```
+Field meanings:
 
-字段含义：
+Field	Meaning
+pdbid	Combination identifier for the structure, chain, and mutation
+wt	Wild-type PDB filename (without .pdb)
+mut	Mutant PDB filename (without .pdb)
+substitution	Biological mutation name, i.e., Ser185→His
+mutation	Model locator field: A indicates chain A, 185 indicates the residue number, and H indicates the residue after mutation
+ddg	Placeholder label required for data loading; it does not participate in prediction during inference and is fixed at 0.0
+Please note that the first A in mutation=A185H is a chain identifier; it does not mean that the wild-type residue is alanine. The wild-type and mutant PDBs have been verified to have SER and HIS, respectively, at position 185 of chain A.
 
-| 字段 | 含义 |
-| --- | --- |
-| `pdbid` | 结构、链和突变的组合标识符 |
-| `wt` | 野生型 PDB 文件名（不含 `.pdb`） |
-| `mut` | 突变型 PDB 文件名（不含 `.pdb`） |
-| `substitution` | 生物学突变名称，即 Ser185→His |
-| `mutation` | 模型定位字段：`A` 表示链 A，`185` 表示残基编号，`H` 表示突变后残基 |
-| `ddg` | 数据加载所需的占位标签；推理时不参与预测，固定为 `0.0` |
-
-请注意，`mutation=A185H` 中的第一个 `A` 是**链标识符**，并不表示野生型残基为丙氨酸。野生型和突变型 PDB 已核验为链 A 第 185 位分别是 `SER` 和 `HIS`。
-
-
-## 单独执行预测
-
-```bash
+Running Prediction Separately
+bash
 python IsPETase_S185H_example/predict_s185h.py \
   --device auto
-```
+By default, the output is written to output/prediction_output.csv.
 
-默认输出至 `output/prediction_output.csv`。
-
-## 输出示例
-
-```csv
+Output Example
+csv
 pdbid,substitution,model_locator,ddg_pred_kcal_mol,execution_device
 5XH3_A_S185H,S185H,A185H,-0.28827786445617676,cuda:0
-```
-
-其中 `ddg_pred_kcal_mol` 是模型直接输出的预测 ΔΔG（kcal/mol），脚本未对符号进行翻转；`execution_device` 记录实际推理设备。正负号应按照论文中声明的 ΔΔG 定义解释。
+Here, ddg_pred_kcal_mol is the predicted ΔΔG (kcal/mol) directly output by the model; the script does not flip the sign. execution_device records the actual inference device. The sign should be interpreted according to the ΔΔG definition stated in the paper.
 
